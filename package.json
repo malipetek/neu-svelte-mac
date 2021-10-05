@@ -36,6 +36,7 @@
     "@types/jsonexport": "^3.0.2",
     "csv": "^5.5.3",
     "jsonexport": "^3.2.0",
-    "sirv-cli": "^1.0.0"
+    "sirv-cli": "^1.0.0",
+    "svelte-json-tree": "^0.1.0"
   }
 }
