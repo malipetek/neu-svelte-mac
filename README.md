@@ -1,11 +1,20 @@
 # Neutralino Svelte MacOS App Boilerplate
 
 ## Get started
+
+First you need to install neu cli globally. Learn more about [Neutralino](https://neutralino.js.org/docs/).
+
+`npm install -g @neutralinojs/neu`
+
 You can get started with this project with following command.
 
-`npx degit malipetek/neu-svelte-mac`
+`npx degit malipetek/neu-svelte-mac my-mac-app`
 
 Then run 
+
+`cd ./my-mac-app`
+
+and 
 
 `npm i -s`
 
