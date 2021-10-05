@@ -1,0 +1,8 @@
+**.app/**.*
+node_modules
+dev_build
+.DS_Store
+.git
+.vscode
+.vscode/**
+package-lock.json
