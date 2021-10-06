@@ -51,7 +51,7 @@ const { IconIcns } = require('@shockpkg/icon-encoder');
   await fs.rename(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', binaryName), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', appname));
   
   // move res.neu to app folder
-  await fs.move(path.resolve(process.cwd(), 'dist', appname, 'res.neu'), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', 'res.neu'));
+  await fs.move(path.resolve(process.cwd(), 'dist', appname, 'res.neu'), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'Resources', 'res.neu'));
   
   // check if file exists
   if (fs.existsSync(path.resolve(process.cwd(), 'src', 'icons', 'appIcon.png'))) { 
@@ -74,6 +74,17 @@ const { IconIcns } = require('@shockpkg/icon-encoder');
   // create an empty icon file in the app folder
   await fs.ensureFile(path.resolve(process.cwd(), `${appname}.app`, 'Icon'));
 
+  // 
+  await fs.writeFile(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', 'parameterized'),
+  `#!/usr/bin/env bash
+  SCRIPT_DIR="$( cd -- "$( dirname -- "\${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+  CONTENTS_DIR="$(dirname "$SCRIPT_DIR")"
+  exec "\${SCRIPT_DIR}/${appname}" --path="\${CONTENTS_DIR}/Resources"`
+  );
+
+  // chmod executable
+  await fs.chmod(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', 'parameterized'), 0o755);
+
   // create info.plist file
   await fs.writeFile(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'info.plist'),
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -83,7 +94,7 @@ const { IconIcns } = require('@shockpkg/icon-encoder');
         <key>NSHighResolutionCapable</key>
         <true/>
         <key>CFBundleExecutable</key>
-        <string>${appname}</string>
+        <string>parameterized</string>
         <key>CFBundleGetInfoString</key>
         <string>${pkg.name}</string>
         <key>CFBundleIconFile</key>
