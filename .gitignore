@@ -1,4 +1,4 @@
-**.app/**.*
+**.app
 node_modules
 dev_build
 .DS_Store
