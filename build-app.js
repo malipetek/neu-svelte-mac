@@ -50,8 +50,10 @@ const { IconIcns } = require('@shockpkg/icon-encoder');
   await fs.move(path.resolve(process.cwd(), 'dist', appname, binaryName), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', binaryName));
   await fs.rename(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', binaryName), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', appname));
   
-  // move res.neu to app folder
-  await fs.move(path.resolve(process.cwd(), 'dist', appname, 'res.neu'), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'Resources', 'res.neu'));
+  // move res.neu or resources.neu to app folder
+  const resources = fs.readdirSync(path.resolve(process.cwd(), 'dist', appname));
+  const resourcesFile = resources.find(file => /res(ources)?/.test(file));
+  await fs.move(path.resolve(process.cwd(), 'dist', appname, resourcesFile), path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'Resources', resourcesFile));
   
   // check if file exists
   if (fs.existsSync(path.resolve(process.cwd(), 'src', 'icons', 'appIcon.png'))) { 
@@ -84,6 +86,7 @@ const { IconIcns } = require('@shockpkg/icon-encoder');
 
   // chmod executable
   await fs.chmod(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', 'parameterized'), 0o755);
+  await fs.chmod(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'MacOS', appname), 0o755);
 
   // create info.plist file
   await fs.writeFile(path.resolve(process.cwd(), `${appname}.app`, 'Contents', 'info.plist'),
